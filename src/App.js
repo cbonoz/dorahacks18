@@ -6,7 +6,6 @@ import { Nav, Navbar, NavItem} from 'react-bootstrap'
 
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 
-
 import './App.css';
 
 class App extends Component {
@@ -26,7 +25,7 @@ class App extends Component {
                   alt="logo" />
               </a>
 
-              {currentPath === '/dashboard' && <span className="App-title ">Project Search</span>}
+              {currentPath === '/dashboard' && <span className="App-title ">Blockchain Project Search</span>}
             </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>

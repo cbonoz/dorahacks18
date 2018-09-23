@@ -15,13 +15,13 @@ class Landing extends Component {
         return (
             <div className="landing-content">
                 {/* <ReactRain numDrops="12" /> */}
-                <StarfieldAnimation
+                {/* <StarfieldAnimation
         style={{
           position: 'absolute',
           width: '100%',
           height: '100%'
         }}
-      />
+      /> */}
                 <div className="jumbo-padding">
                     <Row>
                         <Col md={8}>
@@ -33,7 +33,7 @@ class Landing extends Component {
 
                             <ShareComponent/>
                             <p>
-                                <Button bsStyle="success" href="/dashboard" className="start-button">Get Started</Button>
+                                <Button bsStyle="success" href="/dashboard" className="start-button">Discover Projects</Button>
                             </p>
                         </Col>
 

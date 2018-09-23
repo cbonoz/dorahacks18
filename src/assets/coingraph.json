@@ -1,0 +1,273 @@
+
+{
+    "Response": "Success",
+    "Message": "Social data successfully returned",
+    "Type": 100,
+    "Data": {
+        "General": {
+            "Name": "LTC",
+            "CoinName": "Litecoin",
+            "Type": "Webpagecoinp",
+            "Points": 1649566
+        },
+        "CryptoCompare": {
+            "SimilarItems": [
+                {
+                    "Id": 1182,
+                    "Name": "Bitcoin",
+                    "FullName": "Bitcoin (BTC)",
+                    "ImageUrl": "/media/19633/btc.png",
+                    "Url": "/coins/btc/",
+                    "FollowingType": 1
+                },
+                {
+                    "Id": 7605,
+                    "Name": "Ethereum",
+                    "FullName": "Ethereum (ETH)",
+                    "ImageUrl": "/media/20646/eth_logo.png",
+                    "Url": "/coins/eth/",
+                    "FollowingType": 1
+                },
+                {
+                    "Id": 127356,
+                    "Name": "IOTA",
+                    "FullName": "IOTA (IOT)",
+                    "ImageUrl": "/media/1383540/iota_logo.png",
+                    "Url": "/coins/iot/",
+                    "FollowingType": 1
+                },
+                {
+                    "Id": 202330,
+                    "Name": "Bitcoin Cash",
+                    "FullName": "Bitcoin Cash (BCH)",
+                    "ImageUrl": "/media/1383919/12-bitcoin-cash-square-crop-small-grn.png",
+                    "Url": "/coins/bch/",
+                    "FollowingType": 1
+                },
+                {
+                    "Id": 5038,
+                    "Name": "Monero",
+                    "FullName": "Monero (XMR)",
+                    "ImageUrl": "/media/19969/xmr.png",
+                    "Url": "/coins/xmr/",
+                    "FollowingType": 1
+                },
+                {
+                    "Id": 27368,
+                    "Name": "NEO",
+                    "FullName": "NEO (NEO)",
+                    "ImageUrl": "/media/1383858/neo.jpg",
+                    "Url": "/coins/neo/",
+                    "FollowingType": 1
+                },
+                {
+                    "Id": 24854,
+                    "Name": "ZCash",
+                    "FullName": "ZCash (ZEC)",
+                    "ImageUrl": "/media/351360/zec.png",
+                    "Url": "/coins/zec/",
+                    "FollowingType": 1
+                },
+                {
+                    "Id": 370889,
+                    "Name": "REBL",
+                    "FullName": "REBL (REBL)",
+                    "ImageUrl": "/media/30001864/rebl1.jpg",
+                    "Url": "/coins/rebl/",
+                    "FollowingType": 1
+                },
+                {
+                    "Id": 5324,
+                    "Name": "Ethereum Classic",
+                    "FullName": "Ethereum Classic (ETC)",
+                    "ImageUrl": "/media/33752295/etc_new.png",
+                    "Url": "/coins/etc/",
+                    "FollowingType": 1
+                },
+                {
+                    "Id": 321992,
+                    "Name": "Cardano",
+                    "FullName": "Cardano (ADA)",
+                    "ImageUrl": "/media/12318177/ada.png",
+                    "Url": "/coins/ada/",
+                    "FollowingType": 1
+                }
+            ],
+            "CryptopianFollowers": [
+                {
+                    "Id": 541879,
+                    "Name": "morgothel",
+                    "ImageUrl": "https://images.cryptocompare.com/541879/1e688814-0421-4f3d-839d-089a93fe0e27.jpg",
+                    "Url": "/profile/morgothel/",
+                    "Type": "Cryptopian"
+                },
+                {
+                    "Id": 804127,
+                    "Name": "bitcoindhage",
+                    "ImageUrl": "https://images.cryptocompare.com/804127/2e05ce7e-a412-4255-ace5-ceb45bbe1b9c.jpg",
+                    "Url": "/profile/bitcoindhage/",
+                    "Type": "Cryptopian"
+                },
+                {
+                    "Id": 895181,
+                    "Name": "pezee",
+                    "ImageUrl": "https://images.cryptocompare.com/895181/56e66ec2-a8f1-4ed0-a922-8d21a3561a70.jpg",
+                    "Url": "/profile/pezee/",
+                    "Type": "Cryptopian"
+                },
+                {
+                    "Id": 971134,
+                    "Name": "herman.bergmans1",
+                    "ImageUrl": "https://images.cryptocompare.com/default-user/default-user.png",
+                    "Url": "/profile/herman.bergmans1/",
+                    "Type": "Cryptopian"
+                },
+                {
+                    "Id": 1073442,
+                    "Name": "mosesdtran",
+                    "ImageUrl": "https://images.cryptocompare.com/1073442/a0wy080y000.jpeg",
+                    "Url": "/profile/mosesdtran/",
+                    "Type": "Cryptopian"
+                },
+                {
+                    "Id": 1073886,
+                    "Name": "earthza0122",
+                    "ImageUrl": "https://images.cryptocompare.com/default-user/default-user.png",
+                    "Url": "/profile/earthza0122/",
+                    "Type": "Cryptopian"
+                },
+                {
+                    "Id": 1074114,
+                    "Name": "thirty3baboons",
+                    "ImageUrl": "https://images.cryptocompare.com/default-user/default-user.png",
+                    "Url": "/profile/thirty3baboons/",
+                    "Type": "Cryptopian"
+                },
+                {
+                    "Id": 1074319,
+                    "Name": "syrcevsergej0000",
+                    "ImageUrl": "https://images.cryptocompare.com/default-user/default-user.png",
+                    "Url": "/profile/syrcevsergej0000/",
+                    "Type": "Cryptopian"
+                },
+                {
+                    "Id": 1074348,
+                    "Name": "joelhfx",
+                    "ImageUrl": "https://images.cryptocompare.com/default-user/default-user.png",
+                    "Url": "/profile/joelhfx/",
+                    "Type": "Cryptopian"
+                },
+                {
+                    "Id": 1074579,
+                    "Name": "gilvalejo",
+                    "ImageUrl": "https://images.cryptocompare.com/default-user/default-user.png",
+                    "Url": "/profile/gilvalejo/",
+                    "Type": "Cryptopian"
+                },
+                {
+                    "Id": 1074894,
+                    "Name": "elibe_62",
+                    "ImageUrl": "https://images.cryptocompare.com/1074894/dFmxM8K5dw9.jpeg",
+                    "Url": "/profile/elibe_62/",
+                    "Type": "Cryptopian"
+                }
+            ],
+            "Posts": 11320,
+            "Comments": 20256,
+            "Points": 1382810,
+            "Followers": 35890,
+            "PageViewsSplit": {
+                "Overview": 5162005,
+                "Markets": 417541,
+                "Analysis": 109315,
+                "Charts": 1099744,
+                "Trades": 162462,
+                "Orderbook": 14704,
+                "Forum": 1312601,
+                "Influence": 16405,
+                "News": 2307
+            },
+            "PageViews": 8297084
+        },
+        "Twitter": {
+            "statuses": 737,
+            "followers": 430955,
+            "favourites": "334",
+            "name": "litecoin",
+            "lists": 2967,
+            "link": "https://twitter.com/litecoin",
+            "account_creation": "1317839450",
+            "following": "23",
+            "Points": 46062
+        },
+        "Reddit": {
+            "name": "litecoin",
+            "subscribers": 198567,
+            "community_creation": "1318615591",
+            "comments_per_day": 61.65,
+            "comments_per_hour": "2.57",
+            "active_users": 1460,
+            "link": "https://www.reddit.com/r/litecoin/",
+            "posts_per_day": "10.82",
+            "posts_per_hour": "0.45",
+            "Points": 203070
+        },
+        "Facebook": {
+            "is_closed": "false",
+            "link": "https://www.facebook.com/litecoincommunity/",
+            "talking_about": "37",
+            "likes": 7865,
+            "name": "Litecoin",
+            "Points": 7865
+        },
+        "CodeRepository": {
+            "List": [
+                {
+                    "open_pull_issues": "4",
+                    "url": "https://github.com/litecoin-project/litecoin",
+                    "size": "118970",
+                    "fork": "true",
+                    "stars": 3148,
+                    "closed_total_issues": "517",
+                    "created_at": "1339561106",
+                    "closed_issues": "291",
+                    "closed_pull_issues": "226",
+                    "open_total_issues": "17",
+                    "source": {
+                        "InternalId": 1182,
+                        "Name": "bitcoin",
+                        "Url": "https://github.com/bitcoin/bitcoin",
+                        "InternalData": {
+                            "Id": 1182,
+                            "Name": "Bitcoin",
+                            "Symbol": "BTC",
+                            "ImageUrl": "/media/19633/btc.png",
+                            "Type": "Webpagecoinp",
+                            "Url": "/coins/btc/"
+                        }
+                    },
+                    "last_update": "1537607661",
+                    "subscribers": 546,
+                    "language": "C++",
+                    "forks": 2072,
+                    "parent": {
+                        "InternalId": 1182,
+                        "Name": "bitcoin",
+                        "Url": "https://github.com/bitcoin/bitcoin",
+                        "InternalData": {
+                            "Id": 1182,
+                            "Name": "Bitcoin",
+                            "Symbol": "BTC",
+                            "ImageUrl": "/media/19633/btc.png",
+                            "Type": "Webpagecoinp",
+                            "Url": "/coins/btc/"
+                        }
+                    },
+                    "last_push": "1537495939",
+                    "open_issues": "13"
+                }
+            ],
+            "Points": 8930
+        }
+    }
+}

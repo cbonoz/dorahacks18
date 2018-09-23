@@ -2,7 +2,6 @@ const library = (function () {
     const axios = require('axios')
     const BASE_URL = "https://www.cryptocompare.com"
 
-
     function getCoins() {
         return axios.get(`https://cors-anywhere.herokuapp.com/${BASE_URL}/api/data/coinlist/`)
     }

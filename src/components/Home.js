@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Grid, Row, Col, ListGroupItem, ListGroup } from 'react-bootstrap'
+import { Grid, Row, Col, ListGroupItem, ListGroup, Button } from 'react-bootstrap'
 import { getCachedCoins, getCoins, getCoinInfo, getCoinPrices } from '../helper/api'
 import helper from '../helper/helper'
 import Select from 'react-select';
@@ -8,6 +8,8 @@ import { ForceGraph2D, ForceGraph3D, ForceGraphVR } from 'react-force-graph';
 import ReactChartkick, { LineChart, PieChart } from 'react-chartkick'
 import Chart from 'chart.js'
 import cx from 'classnames';
+
+import loading from '../assets/loading.gif'
 
 
 ReactChartkick.addAdapter(Chart)
@@ -21,15 +23,13 @@ class Home extends Component {
         this.state = {
             coinList: [],
             currentCoin: null,
-            data: {},
+            graphData: {},
             priceData: null,
             simulations: [],
-            recommendation: null,
-            recommendationReasons: []
+            recommendation: null
         }
 
         const self = this
-        // if (SEARCH) {
         getCachedCoins().then(resp => {
             console.log(resp)
             const data = resp['data']['Data']
@@ -46,16 +46,6 @@ class Home extends Component {
             self.readyNotification()
 
         })
-        // } else {
-        //     // DEMO
-        //     fetch('https://raw.githubusercontent.com/vasturiano/react-force-graph/master/example/datasets/miserables.json').then(res => {
-        //         console.log('res', res)
-        //         return res.json()
-        //     }).then(data => {
-        //         console.log(data)
-        //         self.setState({ data: data })
-        //     })
-        // }
     }
 
     componentDidMount() {
@@ -65,35 +55,38 @@ class Home extends Component {
     readyNotification() {
         this._notificationSystem.addNotification({
             title: 'HypeFactors',
-            message: 'Coins Loaded',
+            message: 'Projects Loaded',
             level: 'success',
             position: 'tr'
         });
     }
 
     recomputeSimulation() {
-        const { priceData } = this.state
-        const hasData = priceData instanceof Array && priceData.length > 0
+        const { priceData, currentCoin, graphData } = this.state
+        const hasData = priceData != null
         if (!hasData) {
             console.log('recompute called without priceData - noop')
         }
 
-        // TODO: compute different simulations and render
+        // TODO: compute different simulations and render.
+        const simulations = []
 
-
+        const recommendation = helper.getRecommendation(currentCoin, priceData, graphData)
+        this.setState({ recommendation, simulations })
     }
 
     handleChange = (selectedOption) => {
         const self = this;
         const currentCoin = selectedOption.value
-        self.setState({ currentCoin });
+        self.setState({ currentCoin: currentCoin, graphData: {}});
         console.log(`Option selected:`, currentCoin);
 
-        if (true) {
+        if (SEARCH) {
             getCoinInfo(currentCoin.Id).then(resp => {
                 const data = resp['data']['Data']
-                console.log('coinInfo', data)
-                self.setState({})
+                console.log('graphData', data)
+                const graphData = helper.getGraphData(data)
+                self.setState({ graphData })
             })
         }
 
@@ -116,39 +109,64 @@ class Home extends Component {
         }
     }
 
+    selectRandomProject() {
+        const { coinList } = this.state
+        if (coinList == undefined || coinList.length == 0) {
+            alert('data not ready yet, please wait')
+            return
+        }
+        const coin = helper.getRandom(coinList)
+        this.handleChange(coin)
+    }
+
     render() {
-        const { coinList, currentCoin, data, priceData, simulations, recommendation, recommendationReasons } = this.state
-        const hasData = (Object.keys(data).length > 0)
+        const { coinList, currentCoin, graphData, priceData, simulations, recommendation } = this.state
+        const hasData = (Object.keys(graphData).length > 0)
         const hasPriceData = priceData != null
         return (
             <div className="home-content">
                 {/* <Grid> */}
                 <Row>
-                    <Col xs={6} md={6}  >
+                    <Col xs={3} md={4}  >
 
                         <div className="home-select-area">
+                            {!hasData && <div>
+                                {/* <h4>Welcome</h4> */}
+                                <h4>To Begin,</h4>
+                            </div>}
                             <p className="help-text">Find a Project</p>
+
+                            <div className="select-bar">
                             <Select
                                 value={currentCoin}
                                 onChange={this.handleChange}
                                 options={coinList}
                             />
+                            </div>
+                            <p className="white">or</p>
+
+                            <Button bsStyle='warning' className="random-button" onClick={() => this.selectRandomProject()}>
+                                Discover New Project
+                            </Button>
+
+                            <br/>
 
                             <div className="coin-result-area">
-
-                                {
-                                    currentCoin &&
+                                {currentCoin &&
                                     <div>
 
-                                        <ListGroupItem bsStyle="info" header={currentCoin.CoinName} />
+                                        <ListGroupItem bsStyle="success" header={currentCoin.CoinName} />
                                         <ListGroupItem>
-
-
                                             {Object.keys(currentCoin).map((key, i) => {
                                                 if (key === 'Id' || key === 'CoinName' || key.indexOf('Url') != -1) {
                                                     return
                                                 }
-                                                return <li key={i}>{key}: {JSON.stringify(currentCoin[key])}</li>
+                                                let value = currentCoin[key]
+                                                let numValue = parseInt(currentCoin[key])
+                                                if (!isNaN(numValue)) {
+                                                    value = numValue
+                                                }
+                                                return <li key={i}>{key}: {value}</li>
                                             })}
 
                                         </ListGroupItem>
@@ -158,23 +176,44 @@ class Home extends Component {
                             </div>
                         </div>
                     </Col>
-                    <Col xs={6} md={6}  >
+                    <Col xs={9} md={6}>
+                        {!hasData && currentCoin && 
+                            <div>
+                                <img src={loading}/>
+                            </div>
+                        
+                        }
+                        {hasData && <div>
+                            <h2 className="social-header-text">{currentCoin.CoinName} Social Graph</h2>
+                            <ForceGraph3D
+                                graphData={graphData}
+                                nodeLabel="id"
+                                nodeAutoColorBy="group"
+                                width="850"
+                                height="600"
+                                // backgroundColor="dark"
+                                linkWidth={2}
+                                linkColor="#fff"
+                                nodeLabel="id"
+                                linkDirectionalParticles="value"
+                                linkDirectionalParticleSpeed={d => d.value * 0.001}
+                            />
+                        </div>
+                        }
+                    </Col>
 
-                        {hasData && <ForceGraph3D
-                            graphData={data}
-                            nodeLabel="id"
-                            nodeAutoColorBy="group"
-                            width="600"
-                            height="600"
-                            backgroundColor="light"
-                            linkWidth={2}
-                            linkColor="#fff"
-                            nodeLabel="id"
-                            linkDirectionalParticles="value"
-                            linkDirectionalParticleSpeed={d => d.value * 0.001}
-                        />}
-
-
+                    <Col xs={12} md={2} >
+                        {graphData.infoMap && Object.keys(graphData.infoMap).map(key => {
+                            if (graphData.infoMap[key].length === 0) {
+                                return
+                            }
+                            return (<div>
+                                <h4>{key}</h4>
+                                {graphData.infoMap[key].map(val => {
+                                    return <li>{val}</li>
+                                })}
+                            </div>)
+                        })}
                     </Col>
                 </Row>
 
@@ -183,9 +222,9 @@ class Home extends Component {
                 <br />
 
                 <Row>
-
+                    <div className='white'>
                     {hasPriceData && <Col xs={6} md={6}>
-                        {hasPriceData && <LineChart
+                        <LineChart
                             prefix="$"
                             thousands=","
                             curve={false}
@@ -193,26 +232,24 @@ class Home extends Component {
                             ytitle="Price"
                             messages={{ empty: `No ${currentCoin.CoinName || 'Coin'} data` }}
                             data={priceData}
-
                         />
-                        }
                     </Col>}
-
+                    </div>
                     {hasPriceData && <Col xs={6} md={6}>
 
                         {/* <h3 className="centered">HypeFactors</h3> */}
-                        {recommendation && <div>
+                        {recommendation && <div className="black">
                             <ListGroupItem bsStyle="success" header={'HypeFactors'} />
 
                             <ListGroupItem>
-                                <h1>Recommendation: <span className={cx({
-                                    'green': recommendation === 'Buy',
-                                    'red': recommendation !== 'Buy'
-                                })}>{recommendation}</span></h1>
+                                <h2>Recommendation: <span className={cx({
+                                    'green': recommendation.verdict === 'Buy',
+                                    'red': recommendation.verdict === 'Sell'
+                                })}>{recommendation.verdict}</span></h2>
 
                                 <h3>Reasoning:</h3>
 
-                                {recommendationReasons.map(reason => {
+                                {recommendation.reasons && recommendation.reasons.map(reason => {
                                     return <li>{reason}</li>
                                 })}
                             </ListGroupItem>
