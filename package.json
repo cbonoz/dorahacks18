@@ -5,6 +5,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "chart.js": "^2.7.2",
+    "fs": "^0.0.1-security",
     "react": "^16.5.2",
     "react-bootstrap": "^0.32.4",
     "react-chartkick": "^0.3.0",

@@ -5,8 +5,10 @@ import { getCoins, getCoinInfo, getCoinPrices } from '../helper/api'
 import Select from 'react-select';
 import NotificationSystem from 'react-notification-system'
 import { ForceGraph2D, ForceGraph3D, ForceGraphVR } from 'react-force-graph';
+import helper from '../helper/helper'
 import ReactChartkick, { LineChart, PieChart } from 'react-chartkick'
 import Chart from 'chart.js'
+import fs from 'fs'
 
 ReactChartkick.addAdapter(Chart)
 
@@ -20,26 +22,27 @@ class Home extends Component {
             coinList: [],
             currentCoin: null,
             data: {},
-            priceData: []
+            priceData: [],
+            simulations: [],
+            recommendation: null
         }
 
         const self = this
         if (SEARCH) {
-            getCoins().then(resp => {
-                console.log(resp)
-                const data = resp['data']['Data']
-                console.log(data)
-                const keys = Object.keys(data)
-                const coinList = keys.map(key => {
-                    const coin = data[key]
-                    return {
-                        value: coin,
-                        label: coin.CoinName
-                    }
-                })
-                this.setState({ coinList: coinList })
-                self.readyNotification()
+            const resp = fs.readFileSync('../assets/coins.json')
+            console.log(resp)
+            const data = resp['data']['Data']
+            console.log(data)
+            const keys = Object.keys(data)
+            const coinList = keys.map(key => {
+                const coin = data[key]
+                return {
+                    value: coin,
+                    label: coin.CoinName
+                }
             })
+            this.setState({ coinList: coinList })
+            self.readyNotification()
         } else {
             // DEMO
             fetch('https://raw.githubusercontent.com/vasturiano/react-force-graph/master/example/datasets/miserables.json').then(res => {
@@ -64,9 +67,22 @@ class Home extends Component {
         });
     }
 
+    recomputeSimulation() {
+        const { priceData } = this.state
+        const hasData = priceData instanceof Array && priceData.length > 0
+        if (!hasData) {
+            console.log('recompute called without priceData - noop')
+        }
+
+        // TODO: compute different simulations and render
+
+
+    }
+
     handleChange = (selectedOption) => {
+        const self = this;
         const currentCoin = selectedOption.value
-        this.setState({ currentCoin });
+        self.setState({ currentCoin });
         console.log(`Option selected:`, currentCoin);
 
         getCoinInfo(currentCoin.Id).then(resp => {
@@ -76,13 +92,28 @@ class Home extends Component {
 
         getCoinPrices(currentCoin.Symbol).then(resp => {
             const data = resp['data']['Data']
-            console.log('coinPrices', data)
+
+            // TODO: compute 4 simulated trajectories for the coin price.
+            const priceData = {}
+            data.map(p => {
+                const currentDate = new Date(p.time * 1000)
+                const formattedDate = helper.formatDate(currentDate)
+                priceData[formattedDate] = p.close
+            })
+
+            console.log('priceData', priceData)
+
+            self.setState( {priceData} )
+            self.recomputeSimulation()
+
+
         })
     }
 
     render() {
-        const { coinList, currentCoin, data } = this.state
+        const { coinList, currentCoin, data, priceData, simulations, recommendation } = this.state
         const hasData = (Object.keys(data).length > 0)
+        const hasPriceData = priceData instanceof Array && priceData.length > 0
         return (
             <div className="home-content">
                 {/* <Grid> */}
@@ -102,16 +133,16 @@ class Home extends Component {
                                     currentCoin &&
                                     <div>
 
-                                        <ListGroupItem bsStyle="info" header={currentCoin.CoinName}/>
+                                        <ListGroupItem bsStyle="info" header={currentCoin.CoinName} />
                                         <ListGroupItem>
 
 
-                                        {Object.keys(currentCoin).map((key, i) => {
-                                            if (key === 'Id' || key === 'CoinName' || key.indexOf('Url') != -1) {
-                                                return
-                                            }
-                                            return <li key={i}>{key}: {JSON.stringify(currentCoin[key])}</li>
-                                        })}
+                                            {Object.keys(currentCoin).map((key, i) => {
+                                                if (key === 'Id' || key === 'CoinName' || key.indexOf('Url') != -1) {
+                                                    return
+                                                }
+                                                return <li key={i}>{key}: {JSON.stringify(currentCoin[key])}</li>
+                                            })}
 
                                         </ListGroupItem>
                                     </div>
@@ -140,29 +171,32 @@ class Home extends Component {
                     </Col>
                 </Row>
 
-                <br/>
-                <hr/>
-                <br/>
+                <br />
+                <hr />
+                <br />
 
                 {hasData && <Row>
 
                     <Col xs={6} md={6}>
-                    <PieChart data={[["Blueberry", 44], ["Strawberry", 23]]} />
-                    
+                        {hasPriceData && <PieChart 
+                            data={priceData} 
+
+                            />
+                            }
                     </Col>
 
 
                     <Col xs={6} md={6}>
 
-                        <h3 className="centered">HypeFactors</h3>
+                        {/* <h3 className="centered">HypeFactors</h3> */}
+                        <ListGroupItem bsStyle="success" header={'HypeFactors'} />
 
+                        <ListGroupItem>
 
-
-
+                            Recommendation: {recommendation && { recommendation }}
+                        </ListGroupItem>>
 
                     </Col>
-
-
                 </Row>
                 }
 
