@@ -11,7 +11,13 @@ body {
 
 .landing-content {
   min-height: 100vh;
+  background: black;
   border-bottom: 2px solid yellowgreen;
+}
+
+.hero-image {
+  width: 360px;
+  height: 360px;
 }
 
 .start-button {
@@ -22,6 +28,11 @@ body {
   padding-right: 24px;
 }
 
+.find-a-project {
+  font-weight: bold;
+  font-size: 14px;
+}
+
 .header-text {
   font-size: 24px;
   line-height: 32px;
@@ -30,11 +41,29 @@ body {
   font-weight: bold;
 }
 
+.share-bar {
+  margin-bottom: 10px;
+}
+
 .jumbo-padding {
   margin: 0 auto;
-  margin-top: 50px;
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-top: 150px;
   max-width: 800px;
-  padding: 50px;
+  color: white;
+}
+
+.navbar {
+  margin-bottom: 0px !important;
+}
+
+.red {
+  color: red;
+}
+
+.green {
+  color: green;
 }
 
 .home-select-area {
@@ -46,5 +75,6 @@ body {
 .home-content {
   /* background: black; */
   /* position: relative; */
+  padding: 25px;
   min-height: 100vh;
 }

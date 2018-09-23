@@ -4,7 +4,8 @@
 
 .App-logo {
   /* animation: App-logo-spin infinite 20s linear; */
-  height: 50px;
+  height: 30px;
+  padding-bottom: 2px;
 }
 
 .App-header {
@@ -13,11 +14,12 @@
   text-align: center;
   height: 125px;
   padding: 25px;
-  color: yellowgreen;
 }
 
 .App-title {
-  font-size: 1em;
+  margin-left: 15px;
+  font-size: .8em;
+  color: yellowgreen;
 }
 
 .App-intro {

@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import { Grid, Row, Col, ListGroupItem, ListGroup } from 'react-bootstrap'
-import { getCoins, getCoinInfo, getCoinPrices } from '../helper/api'
-// import SearchComponent from './SearchComponent';
+import { getCachedCoins, getCoins, getCoinInfo, getCoinPrices } from '../helper/api'
+import helper from '../helper/helper'
 import Select from 'react-select';
 import NotificationSystem from 'react-notification-system'
 import { ForceGraph2D, ForceGraph3D, ForceGraphVR } from 'react-force-graph';
-import helper from '../helper/helper'
 import ReactChartkick, { LineChart, PieChart } from 'react-chartkick'
 import Chart from 'chart.js'
-import fs from 'fs'
+import cx from 'classnames';
+
 
 ReactChartkick.addAdapter(Chart)
 
@@ -22,14 +22,15 @@ class Home extends Component {
             coinList: [],
             currentCoin: null,
             data: {},
-            priceData: [],
+            priceData: null,
             simulations: [],
-            recommendation: null
+            recommendation: null,
+            recommendationReasons: []
         }
 
         const self = this
-        if (SEARCH) {
-            const resp = fs.readFileSync('../assets/coins.json')
+        // if (SEARCH) {
+        getCachedCoins().then(resp => {
             console.log(resp)
             const data = resp['data']['Data']
             console.log(data)
@@ -43,17 +44,18 @@ class Home extends Component {
             })
             this.setState({ coinList: coinList })
             self.readyNotification()
-        } else {
-            // DEMO
-            fetch('https://raw.githubusercontent.com/vasturiano/react-force-graph/master/example/datasets/miserables.json').then(res => {
-                console.log('res', res)
-                return res.json()
-            }).then(data => {
-                console.log(data)
-                self.setState({ data: data })
-            })
 
-        }
+        })
+        // } else {
+        //     // DEMO
+        //     fetch('https://raw.githubusercontent.com/vasturiano/react-force-graph/master/example/datasets/miserables.json').then(res => {
+        //         console.log('res', res)
+        //         return res.json()
+        //     }).then(data => {
+        //         console.log(data)
+        //         self.setState({ data: data })
+        //     })
+        // }
     }
 
     componentDidMount() {
@@ -62,8 +64,10 @@ class Home extends Component {
 
     readyNotification() {
         this._notificationSystem.addNotification({
+            title: 'HypeFactors',
             message: 'Coins Loaded',
-            level: 'success'
+            level: 'success',
+            position: 'tr'
         });
     }
 
@@ -85,35 +89,37 @@ class Home extends Component {
         self.setState({ currentCoin });
         console.log(`Option selected:`, currentCoin);
 
-        getCoinInfo(currentCoin.Id).then(resp => {
-            const data = resp['data']['Data']
-            console.log('coinInfo', data)
-        })
-
-        getCoinPrices(currentCoin.Symbol).then(resp => {
-            const data = resp['data']['Data']
-
-            // TODO: compute 4 simulated trajectories for the coin price.
-            const priceData = {}
-            data.map(p => {
-                const currentDate = new Date(p.time * 1000)
-                const formattedDate = helper.formatDate(currentDate)
-                priceData[formattedDate] = p.close
+        if (true) {
+            getCoinInfo(currentCoin.Id).then(resp => {
+                const data = resp['data']['Data']
+                console.log('coinInfo', data)
+                self.setState({})
             })
+        }
 
-            console.log('priceData', priceData)
+        if (SEARCH) {
+            getCoinPrices(currentCoin.Symbol).then(resp => {
+                const data = resp['data']['Data']
+                // TODO: compute 4 simulated trajectories for the coin price.
+                const priceData = {}
+                data.map(p => {
+                    const currentDate = new Date(p.time * 1000)
+                    const formattedDate = helper.formatDate(currentDate)
+                    priceData[formattedDate] = p.close
+                })
 
-            self.setState( {priceData} )
-            self.recomputeSimulation()
+                console.log('priceData', priceData)
 
-
-        })
+                self.setState({ priceData })
+                self.recomputeSimulation()
+            })
+        }
     }
 
     render() {
-        const { coinList, currentCoin, data, priceData, simulations, recommendation } = this.state
+        const { coinList, currentCoin, data, priceData, simulations, recommendation, recommendationReasons } = this.state
         const hasData = (Object.keys(data).length > 0)
-        const hasPriceData = priceData instanceof Array && priceData.length > 0
+        const hasPriceData = priceData != null
         return (
             <div className="home-content">
                 {/* <Grid> */}
@@ -121,6 +127,7 @@ class Home extends Component {
                     <Col xs={6} md={6}  >
 
                         <div className="home-select-area">
+                            <p className="help-text">Find a Project</p>
                             <Select
                                 value={currentCoin}
                                 onChange={this.handleChange}
@@ -175,30 +182,45 @@ class Home extends Component {
                 <hr />
                 <br />
 
-                {hasData && <Row>
+                <Row>
 
-                    <Col xs={6} md={6}>
-                        {hasPriceData && <PieChart 
-                            data={priceData} 
+                    {hasPriceData && <Col xs={6} md={6}>
+                        {hasPriceData && <LineChart
+                            prefix="$"
+                            thousands=","
+                            curve={false}
+                            xtitle="Date"
+                            ytitle="Price"
+                            messages={{ empty: `No ${currentCoin.CoinName || 'Coin'} data` }}
+                            data={priceData}
 
-                            />
-                            }
-                    </Col>
+                        />
+                        }
+                    </Col>}
 
-
-                    <Col xs={6} md={6}>
+                    {hasPriceData && <Col xs={6} md={6}>
 
                         {/* <h3 className="centered">HypeFactors</h3> */}
-                        <ListGroupItem bsStyle="success" header={'HypeFactors'} />
+                        {recommendation && <div>
+                            <ListGroupItem bsStyle="success" header={'HypeFactors'} />
 
-                        <ListGroupItem>
+                            <ListGroupItem>
+                                <h1>Recommendation: <span className={cx({
+                                    'green': recommendation === 'Buy',
+                                    'red': recommendation !== 'Buy'
+                                })}>{recommendation}</span></h1>
 
-                            Recommendation: {recommendation && { recommendation }}
-                        </ListGroupItem>>
+                                <h3>Reasoning:</h3>
 
-                    </Col>
+                                {recommendationReasons.map(reason => {
+                                    return <li>{reason}</li>
+                                })}
+                            </ListGroupItem>
+                        </div>}
+
+                    </Col>}
+
                 </Row>
-                }
 
                 <NotificationSystem ref="notificationSystem" />
             </div>

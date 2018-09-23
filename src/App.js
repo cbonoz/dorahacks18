@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import logo from './assets/hype_logo_white.png'
+import logo from './assets/hype_logo_white_50.png'
 import Landing from './components/Landing'
 import Home from './components/Home'
+import { Nav, Navbar, NavItem} from 'react-bootstrap'
 
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 
@@ -15,10 +16,29 @@ class App extends Component {
     return (
       <div className="App">
 
-        <header className="App-header">
-          <img src={logo} className=" animated fadeIn delay-2s App-logo" alt="logo" />
-          {currentPath === '/dashboard' && <h1 className="App-title ">Project Search</h1>}
-        </header>
+        <Navbar inverse>
+          <Navbar.Header>
+            <Navbar.Brand>
+              <a href="/">
+                <img
+                  src={logo}
+                  className=" animated fadeIn delay-2s App-logo"
+                  alt="logo" />
+              </a>
+
+              {currentPath === '/dashboard' && <span className="App-title ">Project Search</span>}
+            </Navbar.Brand>
+            <Navbar.Toggle />
+          </Navbar.Header>
+          <Nav pullRight>
+            <NavItem eventKey={1} href="/">
+            Home
+      </NavItem>
+            <NavItem eventKey={2} href="/dashboard">
+            Search Projects
+      </NavItem>
+          </Nav>
+        </Navbar>
 
         <Router>
           <div>

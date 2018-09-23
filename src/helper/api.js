@@ -15,10 +15,15 @@ const library = (function () {
         return axios.get(`https://min-api.cryptocompare.com/data/histoday?fsym=${coinSymbol}&tsym=USD&limit=14&aggregate=3&e=CCCAGG`)
     }
 
+    function getCachedCoins() {
+        return axios.get(`https://raw.githubusercontent.com/cbonoz/dorahacks18/master/src/assets/coins.json`)
+    }
+
     return {
         getCoins,
         getCoinInfo,
-        getCoinPrices
+        getCoinPrices,
+        getCachedCoins,
     }
 
 })();
